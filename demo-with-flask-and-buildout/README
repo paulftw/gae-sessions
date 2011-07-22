@@ -11,7 +11,8 @@
 
     Run the following commands in this folder:
         
-        python bootstrap.py --distribute
+        # GAE uses python2.5, use it here, just in case that matters.
+        python2.5 bootstrap.py --distribute
         
         # Will download and unzip all the dependencies
         bin/buildout
