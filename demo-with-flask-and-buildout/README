@@ -1,0 +1,43 @@
+
+* Summary
+
+    Buildout can download and install GAE SDK and all the libraries for you.
+    It will also automatically discover and download updates.
+    This powerful tool lets you focus on developing your great app.
+    
+    This folder contains a sample AppEngine project to get you started. 
+
+* Installation
+
+    Run the following commands in this folder:
+        
+        python bootstrap.py --distribute
+        
+        # Will download and unzip all the dependencies
+        bin/buildout
+   
+
+* Running your app locally
+
+    Run
+
+        bin/dev_appserver app/
+    
+    and open http://localhost:8080 in your browser.
+
+* Deploying to AppEngine
+
+    1. Add your application Id to the first line of the file app/app.yaml.
+    
+    2. Execute
+        bin/appcfg update app/
+    
+    
+* Upgrading
+
+    Every time a new version of gae-sessions or flask is released, you may run
+        
+        bin/buildout
+    
+    to download and install updates.
+    Stop wasting time on wget and tar-zxvf.
