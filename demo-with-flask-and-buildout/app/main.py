@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # Inject gae-sessions into the app
 app.wsgi_app = SessionMiddleware(app.wsgi_app, cookie_key=os.urandom(64),
-                                 lifetime=0)
+                                 lifetime=datetime.timedelta(days=7))
 
 @app.route("/")
 def index():

@@ -172,19 +172,16 @@ class Session(object):
 
     def __make_sid(self, expire_ts=None, ssl_only=False):
         """Returns a new session ID."""
-        if expire_ts is None or True:
-            if self.lifetime:
-                expire_dt = datetime.datetime.now() + self.lifetime
-                expire_ts = int(time.mktime((expire_dt).timetuple()))
-            else:
-                expire_ts = 0
+        # make a random ID (random.randrange() is 10x faster but less secure?)
+        if expire_ts is None:
+            expire_dt = datetime.datetime.now() + self.lifetime
+            expire_ts = int(time.mktime((expire_dt).timetuple()))
         else:
             expire_ts = int(expire_ts)
         if ssl_only:
             sep = 'S'
         else:
             sep = '_'
-        # make a random ID (random.randrange() is 10x faster but less secure?)
         return ('%010d' % expire_ts) + sep + hashlib.md5(os.urandom(16)).hexdigest()
 
     @staticmethod
