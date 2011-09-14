@@ -438,12 +438,15 @@ class SessionMiddleware(object):
     threshold, then session data is kept only in a secure cookie.  This avoids
     memcache/datastore latency which is critical for small sessions.  Larger
     sessions are kept in memcache+datastore instead.  Defaults to 10KB.
+    
+    ``session_class`` - A class used to instantiate new sessions.
     """
-    def __init__(self, app, cookie_key, lifetime=DEFAULT_LIFETIME, no_datastore=False, cookie_only_threshold=DEFAULT_COOKIE_ONLY_THRESH):
+    def __init__(self, app, cookie_key, lifetime=DEFAULT_LIFETIME, no_datastore=False, cookie_only_threshold=DEFAULT_COOKIE_ONLY_THRESH, session_class=Session):
         self.app = app
         self.lifetime = lifetime
         self.no_datastore = no_datastore
         self.cookie_only_thresh = cookie_only_threshold
+        self.session_class = session_class
         self.cookie_key = cookie_key
         if not self.cookie_key:
             raise ValueError("cookie_key MUST be specified")
@@ -452,7 +455,7 @@ class SessionMiddleware(object):
 
     def __call__(self, environ, start_response):
         # initialize a session for the current user
-        _tls.current_session = Session(lifetime=self.lifetime, no_datastore=self.no_datastore, cookie_only_threshold=self.cookie_only_thresh, cookie_key=self.cookie_key)
+        _tls.current_session = self.session_class(lifetime=self.lifetime, no_datastore=self.no_datastore, cookie_only_threshold=self.cookie_only_thresh, cookie_key=self.cookie_key)
 
         # create a hook for us to insert a cookie into the response headers
         def my_start_response(status, headers, exc_info=None):
